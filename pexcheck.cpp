@@ -136,7 +136,7 @@ static std::wstring to_utf16(std::string const & s)
 
 struct version_t
 {
-	version_t() : major(0), minor(0), build(0), revision(0)
+	version_t() : major(0), minor(0)
 	{
 	}
 
@@ -144,26 +144,22 @@ struct version_t
 	{
 		std::stringstream version_stream(version_string);
 		char dot;
-		version_stream >> major >> dot >> minor >> dot >> build >> dot >> revision;
+		version_stream >> major >> dot >> minor;
 	}
 
 	bool operator<(const version_t & other) const
 	{
-		return std::tie(major, minor, build, revision)
-			< std::tie(other.major, other.minor, other.build, other.revision);
+		return std::tie(major, minor) < std::tie(other.major, other.minor);
 	}
 
 	bool operator==(const version_t & other) const
 	{
-		return std::tie(major, minor, build, revision)
-			== std::tie(other.major, other.minor, other.build, other.revision);
+		return std::tie(major, minor) == std::tie(other.major, other.minor);
 	}
 
 private:
 	uint16_t major;
 	uint16_t minor;
-	uint16_t build;
-	uint16_t revision;
 };
 
 struct follow_t
@@ -200,7 +196,7 @@ public:
 
 				bool first = true;
 
-				if (m_pex_version < version_t("1.0.0.5"))
+				if (m_pex_version < version_t("2.0"))
 				{
 					CComPtr<IDiaSymbol> class_parent;
 					if (type->get_classParent(&class_parent) == S_OK)
